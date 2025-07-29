@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Colonias Felinas – Esquema v0.1",
+  "description": "Estructura mínima para colonias, gatos y eventos (fase MVP)",
+  "$defs": {
+    "Colonia": {
+      "type": "object",
+      "required": ["id", "nombre", "ubicacion", "n_gatos_est", "fecha_alta"],
+      "properties": {
+        "id":        { "type": "string", "format": "uuid" },
+        "nombre":    { "type": "string", "minLength": 1 },
+        "ubicacion": {
+          "type": "object",
+          "required": ["lat", "lon"],
+          "properties": {
+            "lat": { "type": "number", "minimum": -90,  "maximum": 90  },
+            "lon": { "type": "number", "minimum": -180, "maximum": 180 }
+          }
+        },
+        "n_gatos_est": { "type": "integer", "minimum": 0 },
+        "fecha_alta":  { "type": "string",  "format": "date" },
+        "notas":       { "type": "string" }
+      }
+    },
+    "Gato": {
+      "type": "object",
+      "required": ["id", "colonia_id", "sexo", "fecha_registro", "esterilizado"],
+      "properties": {
+        "id":             { "type": "string", "format": "uuid" },
+        "colonia_id":     { "type": "string", "format": "uuid" },
+        "sexo":           { "type": "string", "enum": ["M", "F", "desconocido"] },
+        "edad_estimada":  { "type": "integer", "minimum": 0, "description": "Edad en meses" },
+        "esterilizado":   { "type": "boolean" },
+        "fecha_registro": { "type": "string", "format": "date" },
+        "color":          { "type": "string" },
+        "notas":          { "type": "string" }
+      }
+    },
+    "Evento": {
+      "type": "object",
+      "required": ["id", "tipo", "fecha"],
+      "properties": {
+        "id":         { "type": "string", "format": "uuid" },
+        "gato_id":    { "type": "string", "format": "uuid" },
+        "colonia_id": { "type": "string", "format": "uuid" },
+        "tipo":       { "type": "string", "enum": ["captura", "esterilizacion", "control", "baja"] },
+        "fecha":      { "type": "string", "format": "date" },
+        "notas":      { "type": "string" }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "colonias": { "type": "array", "items": { "$ref": "#/$defs/Colonia" } },
+    "gatos":    { "type": "array", "items": { "$ref": "#/$defs/Gato"    } },
+    "eventos":  { "type": "array", "items": { "$ref": "#/$defs/Evento"  } }
+  }
+}
