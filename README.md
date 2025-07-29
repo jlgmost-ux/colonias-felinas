@@ -1,6 +1,6 @@
 # Proyecto Colonias Felinas
 
-> **Estado:** fase inicial · julio 2025  
+> **Estado:** MVP en construcción · julio 2025  
 > **Propósito:** unificar el censo y la gestión CER de colonias felinas en España.
 
 ---
@@ -18,7 +18,7 @@
 
 Crear una plataforma **abierta, gratuita y extensible** donde voluntarios, protectoras y técnicos municipales puedan:
 
-- Registrar **colonias** y **gatos** de forma estandarizada.  
+- Registrar **colonias**, **gatos** y **eventos CER** de forma estandarizada.  
 - Compartir datos bajo licencias libres.  
 - Medir el **progreso CER** con paneles de analítica.
 
@@ -26,25 +26,57 @@ Crear una plataforma **abierta, gratuita y extensible** donde voluntarios, prote
 
 ## 3 · Alcance del MVP (v0.1)
 
-| Módulo | Qué hará | Para qué servirá |
-|--------|----------|------------------|
-| **Catastro** | Alta / consulta de colonias con localización y tamaño aproximado. | Saber dónde y cuántos. |
-| **Censo** | Alta / consulta de gatos (sexo, edad, esterilizado, etc.). | Seguir individuos. |
-| **Eventos** | Registrar capturas, esterilizaciones, bajas y controles sanitarios. | Historial CER. |
-| **Analítica (fase posterior)** | • Paneles de tendencia CER (esterilizaciones realizadas, ratio M/F, colonias activas)<br>• Mapas de densidad de colonias y “puntos calientes” de sobrepoblación | Priorizar intervenciones y evaluar impacto |
+| Módulo | Qué hace hoy | Para qué sirve |
+|--------|--------------|----------------|
+| **Catastro** | Alta / consulta de colonias (endpoints `POST` y `GET`). | Saber dónde y cuántos. |
+| **Censo** | Alta / consulta de gatos, vinculados a su colonia. | Seguir individuos. |
+| **Eventos** | Registrar capturas, esterilizaciones, controles y bajas. | Historial CER. |
+| **Frontend** | Página **/colonias** en SvelteKit que lista colonias. | Primer vistazo web. |
+| **Analítica (fase posterior)** | • Paneles de tendencia CER<br>• Mapas de densidad | Priorizar intervenciones y evaluar impacto |
 
 ---
 
 ## 4 · Tecnologías confirmadas
 
-- **Backend** → FastAPI (Python)  
-- **Base de datos** → PostgreSQL + PostGIS (geo-queries)  
-- **Frontend** → SvelteKit (SPA / PWA)  
-- **Contenedores** → Docker Compose (entorno reproducible)
+| Capa | Herramienta |
+|------|-------------|
+| Backend | **FastAPI** · Python 3.10 |
+| Base de datos | **PostgreSQL 16 + PostGIS** |
+| ORM / Migraciones | **SQLModel + Alembic** |
+| Frontend | **SvelteKit** · TypeScript |
+| Entorno local | Conda |
+| Despliegue futuro | Docker Compose |
 
 ---
 
-## 5 · Identificación automática (idea preliminar)
+## 5 · Guía rápida de ejecución local
+
+### 5.1 Backend
+
+```bash
+# activar entorno
+conda activate colonias
+cd backend
+
+# aplicar/actualizar esquema
+alembic upgrade head
+
+# sembrar datos de prueba (3 colonias, ~8 gatos, eventos)
+python seed_data.py
+
+# lanzar API (http://localhost:8000)
+python -m uvicorn main:app --reload
+```
+### 5.2 Frontend
+```bash
+cd ../frontend
+npm install           # solo la primera vez
+npm run dev -- --open # abre http://localhost:5173
+```
+
+---
+
+## 6 · Identificación automática (idea preliminar)
 
 En fases posteriores se estudiará cómo **identificar ejemplares sin duplicados**, combinando:
 
@@ -55,23 +87,27 @@ El objetivo es detectar gatos nuevos (posibles extraviados o recién llegados) y
 
 ---
 
-## 6 · Próximos pasos
+## 7 · Próximos pasos
 
-1. Publicar **esquema de datos** inicial (colonias, gatos, eventos).  
-2. Configurar PostGIS y migraciones básicas.  
-3. Exponer endpoint “Crear colonia”.  
-4. Sembrar datos de prueba.  
-5. Mostrar primeras colonias en un mapa.
+| Estado | Hito |
+|--------|------|
+| ✅ | Modelos, endpoints básicos y migraciones Alembic |
+| ✅ | Seed de datos y página `/colonias` |
+| 🔜 | Formulario “Nueva colonia” + detalle `/colonias/[id]` |
+| 🔜 | Dockerizar backend + base de datos (`docker-compose.yml`) |
+| 🔜 | TailwindCSS y mapa (Leaflet) |
+| 🔜 | Autenticación básica (token Bearer) |
+
 
 ---
 
-## 7 · Participar
+## 8 · Participar
 
 El proyecto es personal por ahora, pero se mantendrá **público** bajo licencias libres para que cualquiera pueda revisarlo o bifurcarlo. Cuando el MVP sea estable se invitará a protectoras piloto.
 
 ---
 
-## 8 · Licencias
+## 9 · Licencias
 
 - **Código:** MIT  
 - **Esquemas y documentación:** CC BY-SA 4.0
