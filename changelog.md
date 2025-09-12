@@ -85,8 +85,3 @@ All notable changes to this project are documented in this file.
   - “New Colony” form at `/colonias/nueva`.  
 - **Validation and feedback** added to “New Colony” form.  
 
----
-
-> **Next versions:**  
-> - 0.3.0: Map centered in colony detail  
-> - 0.4.0: Docker Compose setup  
