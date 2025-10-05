@@ -107,11 +107,27 @@
         </table>
     </div>
 
-    <!-- Botón añadir gato -->
-    <a
-        href={`/colonias/${data.colonia.id}/gatos/nueva`}
-        class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-    >
-        + Añadir gato
-    </a>
+    <!-- Botones de acción -->
+    <div class="flex flex-wrap gap-3">
+        <a
+            href={`/colonias/${data.colonia.id}/gatos/nueva`}
+            class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        >
+            + Añadir gato
+        </a>
+
+        <a
+            href={`/colonias/${data.colonia.id}/turnos`}
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        >
+            🗓️ Ver calendario de turnos
+        </a>
+
+        <a
+            href="/colonias"
+            class="inline-block bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+        >
+            ← Volver al listado de colonias
+        </a>
+    </div>
 </div>

@@ -2,6 +2,55 @@
 
 All notable changes to this project are documented in this file.
 
+## v0.4.0 – 2025-10-05
+
+### Backend
+- **Modelos**
+  - Añadido modelo `TurnoAlimentacion`:
+    - Campos: `id`, `colonia_id`, `user_id`, `fecha`, `hora` (opcional), `notas`, `created_at`.
+    - `fecha` definido como tipo `Date` para registrar solo día de alimentación.
+  - Ajuste en `User` y `UserColonia`:
+    - Incorporado serializador `@field_serializer("role")` para convertir correctamente el `Enum` a `str` y eliminar warnings de Pydantic.
+    - `UserColonia` documentado y formateado para claridad y consistencia.
+- **Endpoints**
+  - Nuevos endpoints para gestión de turnos:
+    - `GET /turnos`: listar turnos filtrables por colonia, usuario o fecha.
+    - `POST /turnos`: crear turno de alimentación validando colonia y usuario.
+    - `DELETE /turnos/{turno_id}`: eliminar turno por ID.
+  - Nuevo endpoint `GET /users?colonia_id=...` para obtener usuarios asignados a una colonia (voluntarios disponibles en el calendario).
+- **Validaciones**
+  - Prevención de duplicados: un mismo usuario no puede tener dos turnos el mismo día en la misma colonia.
+  - Conversión automática de `fecha` (string → date) antes de persistencia o comparación.
+- **CORS**
+  - Configuración revisada y completada con `allow_credentials=True` para evitar errores en peticiones `POST` desde el frontend.
+- **Depuración**
+  - Solucionado conflicto de tipos `timestamp` vs `character varying` en comparaciones SQL.
+  - Limpieza de logs de Pydantic (`UserRole` serializado correctamente).
+
+### Frontend (SvelteKit)
+- **Calendario de alimentación**
+  - Nueva subruta `/colonias/[id]/turnos`:
+    - Listado de turnos con fecha, usuario y notas.
+    - Formulario de creación con validación y botón “Añadir”.
+    - Opción para eliminar turnos existentes.
+  - Campo `user_id` reemplazado por menú desplegable con todos los usuarios asignados a la colonia (`GET /users?colonia_id`).
+  - Conversión de fecha al formato ISO estándar antes del envío al backend.
+- **Detalle de colonia**
+  - Añadido botón “🗓️ Ver calendario de turnos” que enlaza con `/colonias/[id]/turnos`.
+  - Añadido botón “← Volver al listado de colonias” para navegación rápida.
+- **UX**
+  - Mensajes de error claros y validación visual.
+  - Diseño simple y accesible (pensado para voluntarios con poca experiencia técnica).
+  - Botones grandes y contraste alto para uso en dispositivos móviles.
+
+### Estado actual
+- Turnos de alimentación totalmente funcionales: crear, listar y eliminar desde el frontend.  
+- Sin errores de CORS ni conflictos de tipos `date`.  
+- Sin warnings de Pydantic en serialización de usuarios.  
+- Proyecto sincronizado y estable, preparado para siguientes pasos:
+  - Endpoint de asignación de usuarios a colonias desde frontend.
+  - Funcionalidad de pase de lista (Asistencias) desde vista de colonia.
+
 
 ## v0.3.0 – 2025-09-12
 
@@ -70,6 +119,7 @@ All notable changes to this project are documented in this file.
 - CSS import conflicts resolved via `svelte-add tailwindcss`.  
 - Validation logic refined in “New Colony” and “Add Cat” forms.
 
+
 ## [0.1.0] – 2025-07-29
 ### Added
 - **Data models** (`Colonia`, `Gato`, `Evento`) defined with SQLModel.  
@@ -84,4 +134,3 @@ All notable changes to this project are documented in this file.
   - List of colonies (`/colonias`) fetching from API.
   - “New Colony” form at `/colonias/nueva`.  
 - **Validation and feedback** added to “New Colony” form.  
-
