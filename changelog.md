@@ -2,6 +2,44 @@
 
 All notable changes to this project are documented in this file.
 
+
+## v0.4.5 – 2025-10-07
+
+### Frontend (SvelteKit)
+- **Calendario interactivo**
+  - Añadido bloque de calendario mensual en `/colonias/[id]/turnos`, visible sobre los formularios de creación.
+  - Muestra los días del mes actual con codificación visual:
+    - **Verde** → días con turno asignado (incluye nombre del voluntario).
+    - **Gris** → días sin turno.
+  - Permite navegar entre meses con los botones “← / →”.
+  - Al hacer clic en un día:
+    - Si **no tiene turno**, abre modal para asignar usuario y notas.
+    - Si **ya tiene turno**, abre modal para **editar** o **eliminar** la asignación existente.
+  - Los cambios en el calendario se sincronizan inmediatamente con la tabla inferior y el backend.
+- **Modal de gestión de turnos**
+  - Implementado modal unificado para crear, editar o eliminar turnos desde el calendario.
+  - Validaciones visuales (usuario obligatorio, errores de red, etc.).
+  - Botones de acción claros y adaptados a móvil.
+- **Correcciones**
+  - Corregida la lógica de generación de turnos semanales repetidos:
+    - Solo se crean los días del rango válido (desde hoy hasta el último día del mes actual o siguiente según selección).
+    - Se evita la duplicación interna y externa (comparando `fecha + usuario`).
+  - Actualización inmediata de la vista tras añadir o eliminar turnos.
+- **Usabilidad**
+  - Calendario con tamaño y espaciado ajustados al ancho del contenedor (`max-w-5xl`).
+  - Modal centrado y sombreado suave (`bg-black/40`).
+  - Consistencia en botones y estilos de hover con los formularios existentes.
+
+### Estado actual
+- **Turnos recurrentes** completamente operativos (sin duplicados ni saltos de fechas).
+- **Calendario mensual** integrado y sincronizado con la tabla de turnos.
+- Posibilidad de gestionar turnos desde interfaz visual o formularios clásicos.
+- Preparado para incorporar próximas mejoras:
+  - Edición directa en la tabla (inline edit).
+  - Filtrado por usuario o mes.
+  - Vista consolidada de varios meses.
+
+
 ## v0.4.0 – 2025-10-05
 
 ### Backend
